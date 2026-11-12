@@ -1,0 +1,13 @@
+{
+  "format": "joons-mcp-mock-server/fixtures",
+  "fixtureVersion": 1,
+  "missingFixture": "error",
+  "scenarios": { "checkout-outage": { "description": "Checkout is unavailable." } },
+  "tools": {
+    "cancel_order": { "default": { "content": [{ "type": "text", "text": "Mock cancellation." }] }, "scenarios": { "checkout-outage": { "protocolError": { "code": -32603, "message": "Mock cancellation unavailable." } } } },
+    "create_order": { "default": { "content": [{ "type": "text", "text": "Mock order created." }] }, "scenarios": { "checkout-outage": { "isError": true, "content": [{ "type": "text", "text": "Mock checkout unavailable." }] } } },
+    "get_customer": { "default": { "content": [{ "type": "text", "text": "Mock customer." }] } },
+    "get_product": { "default": { "content": [{ "type": "text", "text": "Mock product." }] } },
+    "search_products": { "default": { "content": [{ "type": "text", "text": "Mock search results." }], "structuredContent": { "items": [] } }, "match": [{ "arguments": { "query": "boots" }, "response": { "content": [{ "type": "text", "text": "Mock boots found." }], "structuredContent": { "items": [{ "id": "boots" }] } } }] }
+  }
+}

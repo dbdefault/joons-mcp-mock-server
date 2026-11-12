@@ -1,0 +1,16 @@
+{
+  "name": "joons-mcp-mock-server",
+  "version": "0.1.0",
+  "description": "Create realistic mock MCP servers from tool snapshots for safe agent development and testing.",
+  "type": "module",
+  "bin": { "joons-mcp-mock-server": "bin/joons-mcp-mock-server.js" },
+  "main": "src/index.js",
+  "exports": { ".": "./src/index.js", "./package.json": "./package.json" },
+  "files": ["bin", "src", "docs", "examples", "README.md", "README.ko.md", "LICENSE", "CHANGELOG.md", "SECURITY.md", "ARCHITECTURE.md"],
+  "engines": { "node": ">=20" },
+  "scripts": { "test": "node scripts/test.js" },
+  "dependencies": { "@modelcontextprotocol/sdk": "~1.32.2" },
+  "keywords": ["mcp", "model-context-protocol", "mock", "testing", "ai-agents", "fixtures", "stdio"],
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "git+https://github.com/dbdefault/joons-mcp-mock-server.git" }
+}

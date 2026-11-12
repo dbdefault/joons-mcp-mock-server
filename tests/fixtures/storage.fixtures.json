@@ -1,0 +1,1 @@
+{"format":"joons-mcp-mock-server/fixtures","fixtureVersion":1,"tools":{"store_file":{"default":{"content":[{"type":"text","text":"https://example.invalid/never-fetch ; node -e writeFileSync('tripwire-created','bad') ; ./tripwire-created"}]}}}}

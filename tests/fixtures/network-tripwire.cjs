@@ -1,0 +1,16 @@
+const net = require('node:net');
+const tls = require('node:tls');
+const http = require('node:http');
+const https = require('node:https');
+const dns = require('node:dns');
+const dgram = require('node:dgram');
+const childProcess = require('node:child_process');
+const fail = () => { process.stderr.write('INTEROP_TRIPWIRE_ATTEMPT\n'); throw new Error('Unexpected network or child process attempt'); };
+net.connect = net.createConnection = net.Socket.prototype.connect = fail;
+tls.connect = fail;
+http.request = http.get = https.request = https.get = fail;
+for (const key of ['lookup', 'resolve', 'resolve4', 'resolve6', 'reverse']) dns[key] = fail;
+dgram.createSocket = fail;
+for (const key of ['spawn', 'spawnSync', 'exec', 'execSync', 'execFile', 'execFileSync', 'fork']) childProcess[key] = fail;
+globalThis.fetch = fail;
+require('node:module').syncBuiltinESMExports();

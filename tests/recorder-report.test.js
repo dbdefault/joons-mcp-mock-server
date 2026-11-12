@@ -1,0 +1,33 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createRecorder } from '../src/server/recorder.js';
+const snapshot = { server: { name: 'sample' }, tools: [] };
+test('nested masking, exact custom keys, length and depth truncation, data keys', () => {
+  const recorder = createRecorder({ snapshot, options: { maskKeys: ['custom'] } });
+  const args = JSON.parse('{"__proto__":{"Token":"hidden"},"nested":[{"PASSWORD":"hidden","custom":"hidden","Custom":"visible"}]}');
+  args.long = 'x'.repeat(1100);
+  args.deep = { child: {} };
+  let node = args.deep.child;
+  for (let i = 0; i < 20; i++) node = node.child = {};
+  recorder.record({ name: '__proto__', args, outcome: 'result', source: 'fixture_default' });
+  const report = recorder.report();
+  assert.equal(report.calls[0].arguments.__proto__.Token, '[MASKED]');
+  assert.deepEqual(report.calls[0].arguments.nested[0], { PASSWORD: '[MASKED]', custom: '[MASKED]', Custom: 'visible' });
+  assert.equal(report.calls[0].arguments.long.length, 1000);
+  assert.match(JSON.stringify(report), /TRUNCATED/);
+  assert.equal(Object.hasOwn(report.tools, '__proto__'), true);
+  report.calls[0].arguments.long = 'changed';
+  assert.equal(recorder.report().calls[0].arguments.long.length, 1000);
+  assert.equal(args.nested[0].PASSWORD, 'hidden');
+});
+test('recordArguments=false removes arguments everywhere and stable report key order', () => {
+  const recorder = createRecorder({ snapshot, options: { recordArguments: false } });
+  recorder.record({ name: 'z', args: { secret: 'hidden' }, outcome: 'result', source: 'fixture_default' });
+  recorder.record({ name: 'a', outcome: 'is_error', source: 'missing_fixture' });
+  const report = recorder.report();
+  assert.deepEqual(Object.keys(report), ['format', 'schemaVersion', 'mock', 'server', 'scenario', 'totals', 'tools', 'lastCall', 'calls', 'droppedCalls']);
+  assert.deepEqual(Object.keys(report.tools), ['a', 'z']);
+  assert.equal(JSON.stringify(report).includes('Arguments'), false);
+  assert.equal(Object.hasOwn(report.lastCall, 'arguments'), false);
+  assert.equal(Object.hasOwn(report.calls[0], 'arguments'), false);
+});

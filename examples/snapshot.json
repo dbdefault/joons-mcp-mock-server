@@ -1,0 +1,16 @@
+{
+  "format": "joons-mcp-diff/snapshot",
+  "schemaVersion": 1,
+  "createdAt": "2026-11-12T00:00:00Z",
+  "tool": { "name": "joons-mcp-diff", "version": "0.1.0" },
+  "label": "Fictional shop",
+  "server": { "name": "fictional-shop", "version": "1.0.0", "protocolVersion": "2025-11-25" },
+  "tools": [
+    { "name": "cancel_order", "title": null, "description": "Cancel an order.", "inputSchema": { "type": "object", "properties": { "order_id": { "type": "string" } }, "required": ["order_id"] }, "outputSchema": null, "annotations": { "destructiveHint": true } },
+    { "name": "create_order", "title": null, "description": "Create an order.", "inputSchema": { "type": "object", "properties": { "product_id": { "type": "string" } }, "required": ["product_id"] }, "outputSchema": null, "annotations": null },
+    { "name": "get_customer", "title": null, "description": "Get a customer.", "inputSchema": { "type": "object", "properties": { "customer_id": { "type": "string" } }, "required": ["customer_id"] }, "outputSchema": null, "annotations": null },
+    { "name": "get_product", "title": null, "description": "Get a product.", "inputSchema": { "type": "object", "properties": { "product_id": { "type": "string" } }, "required": ["product_id"] }, "outputSchema": null, "annotations": null },
+    { "name": "search_products", "title": null, "description": "Search products.", "inputSchema": { "type": "object", "properties": { "query": { "type": "string" }, "limit": { "type": "integer", "minimum": 1, "maximum": 50 } }, "required": ["query"] }, "outputSchema": { "type": "object", "properties": { "items": { "type": "array" } }, "required": ["items"] }, "annotations": null }
+  ],
+  "stats": { "toolCount": 5, "pages": 1 }
+}
