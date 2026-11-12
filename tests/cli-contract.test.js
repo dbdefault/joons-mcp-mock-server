@@ -89,7 +89,7 @@ test('help includes all commands, options, defaults and exit codes; version is e
   const v = await run(['--version']); assert.equal(v.code, 0); assert.equal(v.out, '0.1.0\n'); assert.equal(v.err, '');
 });
 test('bin ignores asynchronous stderr EPIPE', async () => {
-  const script = `process.stderr.destroy(Object.assign(new Error('closed'),{code:'EPIPE'})); process.argv=['node','bin','bad']; await import('./bin/joons-mcp-mock-server.js');`;
+  const script = `process.argv=['node','bin','bad']; process.stderr.write=()=>{ process.nextTick(()=>process.stderr.emit('error',Object.assign(new Error('closed'),{code:'EPIPE'}))); return true; }; await import('./bin/joons-mcp-mock-server.js');`;
   const child = spawn(process.execPath, ['--input-type=module', '-e', script], { stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
   let err = ''; child.stderr.on('data', c => { err += c; });
   const code = await new Promise((resolve, reject) => { child.on('error', reject); child.on('close', resolve); });
